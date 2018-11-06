@@ -1,0 +1,2 @@
+# Prolog-LocalAreaNetwork
+Para este proyecto se implementa un conjunto de predicados para representar las conexiones una red simple de área local y poder resolver o calcular algunas características sobre la red, como accesibilidad o confiabilidad. La red se representará como un grafo no dirigido. Cada nodo representará un equipo conectado a la red, y los arcos describirán algunas características de las conexiones correspondientes.
