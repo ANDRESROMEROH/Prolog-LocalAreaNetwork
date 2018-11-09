@@ -1,3 +1,9 @@
+% Paradigmas de Programacion
+% Proyecto #3: Red de Are Local en Prolog
+% Andres Romero Hernandez.
+% Estefania Murillo Romero.
+
+
 % Definicion del Grafo %
 
 %Servidores:
@@ -13,7 +19,7 @@ cliente(7).
 cliente(8).
 cliente(9).
 
-% VERTICES -> vertice(NodoSalida, NodoLlegada, Confianza, Velocidad, Tipo)
+% VERTICES -> vertice(NodoSalida, NodoLlegada, Confianza, Velocidad)
 
 %Conexiones de 1:
 vertice(1,2,0.99,20).
@@ -58,13 +64,13 @@ vertice(9,3,0.98,0.03).
 
 % Predicados Auxiliares
 
-%Predicado que verifica si 2 nodos estan conectados
+%Predicado que verifica si 2 nodos estan conectados directamente
 % X -> Nodo Salida
 % Y -> Nodo Llegada
 % C -> Confianza
 % V -> Velocidad
-conectados(X,Y,C,V):-
-    vertice(X,Y,C,V) ; vertice(Y,X,C,V).
+conectados(X,Y):-
+    vertice(X,Y,_,_) ; vertice(Y,X,_,_).
 
 % FIN Predicados Auxiliares...
 
@@ -72,7 +78,39 @@ conectados(X,Y,C,V):-
 %Predicados a Completar:
 
 %conexion(A,B).
+conexion(X,Y):-
+    visitar(X,Y,[X]).
+
+visitar(X,Y,_) :- 
+    conectados(X,Y).
+
+visitar(X,Y1,Visitado):-
+    conectados(X,Y2),           
+    servidor(Y2),
+    Y2 \== Y1,
+    \+member(Y2,Visitado),
+    visitar(Y2,Y1,[Y2|Visitado]). 
+
 %conexion(A,B,Ruta).
+conexion(X,Y,Ruta):-
+    visitar(X,Y,[X],Inversa), 
+    reverse(Inversa,Ruta).
+
+visitar(X,Y,R,[Y|R]) :- 
+    conectados(X,Y).
+
+visitar(X,Y1,Visitado,Ruta):-
+    conectados(X,Y2),           
+    servidor(Y2),
+    Y2 \== Y1,
+    \+member(Y2,Visitado),
+    visitar(Y2,Y1,[Y2|Visitado],Ruta).  
+
 %velocidad_maxima(A,B,Ruta,V).
+
+
 %velocidad_maxima(A,B,V).
+
+
 %confiabilidad(A,B,Ruta,P).
+
