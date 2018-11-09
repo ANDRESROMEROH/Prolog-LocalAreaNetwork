@@ -113,4 +113,16 @@ visitar(X,Y1,Visitado,Ruta):-
 
 
 %confiabilidad(A,B,Ruta,P).
+confiabilidad(X,Y,Ruta,P):-
+    c2(X,Y,Ruta,P).
 
+c2(X,Y,[X,Y],P) :- 
+    vertice(X,Y,P,_).
+
+c2(X,Y1,Visitado,Confianza):-
+    conectados(X,Y2),           
+    servidor(Y2),
+    Y2 \== Y1,
+    \+member(Y2,Visitado),
+    c2(Y2,Y1,[Y2|Visitado],C3),
+    Confianza is  Confianza * C3.
