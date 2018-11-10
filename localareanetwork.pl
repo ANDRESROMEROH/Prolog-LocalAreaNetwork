@@ -1,6 +1,7 @@
+% Universidad Nacional de Costa Rica
 % Paradigmas de Programacion
 % Proyecto #3: Red de Are Local en Prolog
-% Andres Romero Hernandez.
+% Andres Romero Hernandez, 4-0230-0958.
 % Estefania Murillo Romero.
 
 
@@ -63,18 +64,17 @@ vertice(9,3,0.98,0.03).
 
 
 % Predicados Auxiliares
-
-%Predicado que verifica si 2 nodos estan conectados directamente
 % X -> Nodo Salida
 % Y -> Nodo Llegada
 % C -> Confianza
 % V -> Velocidad
-conectados(X,Y):-
+conectados(X,Y):- %Predicado que verifica si 2 nodos estan conectados directamente
     vertice(X,Y,_,_) ; vertice(Y,X,_,_).
 
 confianza(X,Y,C):-
     vertice(X,Y,C,_).
 
+primero([X|_],X). %Devuelve el primer elemento de una lista
 % FIN Predicados Auxiliares...
 
 
@@ -110,12 +110,11 @@ visitar(X,Y1,Visitado,Ruta):-
     \+member(Y2,Visitado),
     visitar(Y2,Y1,[Y2|Visitado],Ruta).  
 
-primero([X|_],X). %Devuelve el primer elemento de una lista
 
-%velocidad_maxima(A,B,Ruta,V).
+%velocidad_maxima(A,B,Ruta,V). /ESTEFANIA
 
 
-%velocidad_maxima(A,B,V).
+%velocidad_maxima(A,B,V). /ESTEFANIA
 
 
 % confiabilidad(A,B,Ruta,P).
@@ -129,11 +128,10 @@ c2(X,Y,[X,Y],P) :-
     vertice(X,Y,P,_).
 
 c2(X,Y1,[_|LRuta],Confianza):-
+    primero(LRuta,Y2),
     conectados(X,Y2),           
     servidor(Y2),
     Y2 \== Y1,
-    member(Y2,LRuta),
-    primero(LRuta,Y3),
-    confianza(X,Y3,C4),
+    confianza(X,Y2,C4),
     c2(Y2,Y1,LRuta,C3),
     Confianza is C4 * C3.
