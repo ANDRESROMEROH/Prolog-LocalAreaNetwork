@@ -72,6 +72,9 @@ vertice(9,3,0.98,0.03).
 conectados(X,Y):-
     vertice(X,Y,_,_) ; vertice(Y,X,_,_).
 
+confianza(X,Y,C):-
+    vertice(X,Y,C,_).
+
 % FIN Predicados Auxiliares...
 
 
@@ -90,6 +93,7 @@ visitar(X,Y1,Visitado):-
     Y2 \== Y1,
     \+member(Y2,Visitado),
     visitar(Y2,Y1,[Y2|Visitado]). 
+    
 
 %conexion(A,B,Ruta).
 conexion(X,Y,Ruta):-
@@ -106,23 +110,30 @@ visitar(X,Y1,Visitado,Ruta):-
     \+member(Y2,Visitado),
     visitar(Y2,Y1,[Y2|Visitado],Ruta).  
 
+primero([X|_],X). %Devuelve el primer elemento de una lista
+
 %velocidad_maxima(A,B,Ruta,V).
 
 
 %velocidad_maxima(A,B,V).
 
 
-%confiabilidad(A,B,Ruta,P).
+% confiabilidad(A,B,Ruta,P).
+% Ejemplo #1: confiabilidad(9,5,[9,3,1,5],C). -> C = 0.88445 .
+% Ejemplo #2: confiabilidad(9,6,[9,3,2,6],C). -> C = 0.931588 .
+
 confiabilidad(X,Y,Ruta,P):-
     c2(X,Y,Ruta,P).
 
 c2(X,Y,[X,Y],P) :- 
     vertice(X,Y,P,_).
 
-c2(X,Y1,Visitado,Confianza):-
+c2(X,Y1,[_|LRuta],Confianza):-
     conectados(X,Y2),           
     servidor(Y2),
     Y2 \== Y1,
-    \+member(Y2,Visitado),
-    c2(Y2,Y1,[Y2|Visitado],C3),
-    Confianza is  Confianza * C3.
+    member(Y2,LRuta),
+    primero(LRuta,Y3),
+    confianza(X,Y3,C4),
+    c2(Y2,Y1,LRuta,C3),
+    Confianza is C4 * C3.
