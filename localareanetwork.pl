@@ -2,7 +2,7 @@
 % Paradigmas de Programacion
 % Proyecto #3: Red de Are Local en Prolog
 % Andres Romero Hernandez, 4-0230-0958.
-% Estefania Murillo Romero.
+% Estefania Murillo Romero, 1-1700-0387.
 
 
 % Definicion del Grafo %
@@ -23,42 +23,42 @@ cliente(9).
 % VERTICES -> vertice(NodoSalida, NodoLlegada, Confianza, Velocidad)
 
 %Conexiones de 1:
-vertice(1,2,0.99,20).
-vertice(1,3,0.95,30).
-vertice(1,4,0.99,20).
-vertice(1,5,0.95,0.1).
+vertice(1,2,0.99,25000).
+vertice(1,3,0.95,30000).
+vertice(1,4,0.99,20000).
+vertice(1,5,0.95,100).
 
 %Conexiones de 2:
-vertice(2,1,0.99,25).
-vertice(2,3,0.98,40).
-vertice(2,6,0.97,0.03).
-vertice(2,7,0.95,0.02).
+vertice(2,1,0.99,25000).
+vertice(2,3,0.98,40000).
+vertice(2,6,0.97,30).
+vertice(2,7,0.95,20).
 
 %Conexiones de 3:
-vertice(3,1,0.95,30).
-vertice(3,2,0.98,40).
-vertice(3,7,0.90,0.04).
-vertice(3,8,0.96,0.01).
-vertice(3,9,0.98,0.03).
+vertice(3,1,0.95,30000).
+vertice(3,2,0.98,40000).
+vertice(3,7,0.90,40).
+vertice(3,8,0.96,10).
+vertice(3,9,0.98,30).
 
 %Conexiones de 4:
-vertice(4,1,0.99,20).
+vertice(4,1,0.99,20000).
 
 %Conexiones de 5:
-vertice(5,1,0.95,0.1).
+vertice(5,1,0.95,100).
 
 %Conexiones de 6:
-vertice(6,2,0.97,0.03).
+vertice(6,2,0.97,30).
 
 %Conexiones de 7:
-vertice(7,2,0.95,0.02).
-vertice(7,3,0.90,0.04).
+vertice(7,2,0.95,20).
+vertice(7,3,0.90,40).
 
 %Conexiones de 8:
-vertice(8,3,0.96,0.01).
+vertice(8,3,0.96,10).
 
 %Conexiones de 9:
-vertice(9,3,0.98,0.03).
+vertice(9,3,0.98,30).
 
 % FIN Definicion del Grafo...
 
@@ -71,8 +71,13 @@ vertice(9,3,0.98,0.03).
 conectados(X,Y):- %Predicado que verifica si 2 nodos estan conectados directamente
     vertice(X,Y,_,_) ; vertice(Y,X,_,_).
 
+velocidad(X,Y,V):-
+	vertice(X,Y,_,V).
+
 confianza(X,Y,C):-
     vertice(X,Y,C,_).
+
+aux(X,C):- ( is_list(X) -> C = X ; C = [X]).
 
 primero([X|_],X). %Devuelve el primer elemento de una lista
 % FIN Predicados Auxiliares...
@@ -111,10 +116,34 @@ visitar(X,Y1,Visitado,Ruta):-
     visitar(Y2,Y1,[Y2|Visitado],Ruta).  
 
 
-%velocidad_maxima(A,B,Ruta,V). /ESTEFANIA
+
+	
+velocidad_maxima(A,B,Ruta,V):-
+	vel(A,B,Ruta,Velocidades),
+	min_list(Velocidades,V).
+	
+
+vel(A,B,[A,B],V):-
+	velocidad(A,B,V).
+
+% vel(A,B,[A,X|Xr],Velocidades):-
+% 	member(B,Xr),
+% 	velocidad(A,X,V1),
+% 	append([V1],[Velocidades],Velocidades),
+% 	vel(X,B,[X|Xr],Velocidades).
+
+vel(X,Y1,[_|LRuta],Velocidades):-
+    primero(LRuta,Y2),
+    conectados(X,Y2),           
+    servidor(Y2),
+    Y2 \== Y1,
+    velocidad(X,Y2,V),
+    vel(Y2,Y1,LRuta,V2),
+    aux(V2,C),
+    append([V],C,Velocidades).
 
 
-%velocidad_maxima(A,B,V). /ESTEFANIA
+%velocidad_maxima(A,B,V).
 
 
 % confiabilidad(A,B,Ruta,P).
