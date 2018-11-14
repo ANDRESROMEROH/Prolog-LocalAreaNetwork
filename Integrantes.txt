@@ -1,0 +1,7 @@
+Universidad Nacional de Costa Rica
+Paradigmas de Programación
+Proyecto #3: Red de Área Local en Prolog
+Integrantes:
+Andrés Romero Hernández, 4-0230-0958.
+Estefanía Murillo Romero, 1-1700-0387.
+II Ciclo, 2018

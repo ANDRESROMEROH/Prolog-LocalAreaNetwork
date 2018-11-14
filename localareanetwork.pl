@@ -1,11 +1,12 @@
 % Universidad Nacional de Costa Rica
-% Paradigmas de Programacion
-% Proyecto #3: Red de Are Local en Prolog
-% Andres Romero Hernandez, 4-0230-0958.
-% Estefania Murillo Romero, 1-1700-0387.
+% Paradigmas de Programación
+% Proyecto #3: Red de Área Local en Prolog
+% Andrés Romero Hernández, 4-0230-0958.
+% Estefanía Murillo Romero, 1-1700-0387.
+% II Ciclo, 2018
 
 
-% Definicion del Grafo %
+% Definición del Grafo %
 
 %Servidores:
 servidor(1).
@@ -20,7 +21,7 @@ cliente(7).
 cliente(8).
 cliente(9).
 
-% VERTICES -> vertice(NodoSalida, NodoLlegada, Confianza, Velocidad)
+% VÉRTICES -> vertice(NodoSalida, NodoLlegada, Confianza, Velocidad)
 
 %Conexiones de 1:
 vertice(1,2,0.99,25000).
@@ -60,7 +61,7 @@ vertice(8,3,0.96,10).
 %Conexiones de 9:
 vertice(9,3,0.98,30).
 
-% FIN Definicion del Grafo...
+% FIN Definición del Grafo...
 
 
 % Predicados Auxiliares
@@ -68,6 +69,8 @@ vertice(9,3,0.98,30).
 % Y -> Nodo Llegada
 % C -> Confianza
 % V -> Velocidad
+% D -> Dato de Entrada
+% E -> Dato de Salida
 conectados(X,Y):- %Predicado que verifica si 2 nodos estan conectados directamente
     vertice(X,Y,_,_) ; vertice(Y,X,_,_).
 
@@ -77,7 +80,7 @@ velocidad(X,Y,V):-
 confianza(X,Y,C):-
     vertice(X,Y,C,_).
 
-aux(X,C):- ( is_list(X) -> C = X ; C = [X]).
+aux(D,E):- ( is_list(D) -> E = D ; E = [D]). %Devuelve una lista en caso de que el elemento de entrada no lo sea.
 
 primero([X|_],X). %Devuelve el primer elemento de una lista
 % FIN Predicados Auxiliares...
@@ -85,7 +88,9 @@ primero([X|_],X). %Devuelve el primer elemento de una lista
 
 %Predicados a Completar:
 
-%conexion(A,B).
+%conexión(A,B).
+%Ejemplo #1: conexion(9,3). -> true.
+%Ejemplo #2: conexion(1,6). -> true.
 conexion(X,Y):-
     visitar(X,Y,[X]).
 
@@ -100,7 +105,9 @@ visitar(X,Y1,Visitado):-
     visitar(Y2,Y1,[Y2|Visitado]). 
     
 
-%conexion(A,B,Ruta).
+%conexión(A,B,Ruta).
+%Ejemplo #1: conexion(9,6,Ruta). 
+%Ejemplo #2: conexion(8,7,Ruta).
 conexion(X,Y,Ruta):-
     visitar(X,Y,[X],Inversa), 
     reverse(Inversa,Ruta).
@@ -115,22 +122,15 @@ visitar(X,Y1,Visitado,Ruta):-
     \+member(Y2,Visitado),
     visitar(Y2,Y1,[Y2|Visitado],Ruta).  
 
-
-
-	
+%velocidad_maxima(A,B,Ruta,V)
+%Ejemplo #1: velocidad_maxima(9,6,[9,3,2,6],V). -> V=30.
+%Ejemplo #2: velocidad_maxima(7,4,[7,3,1,4],V). -> V=40.
 velocidad_maxima(A,B,Ruta,V):-
 	vel(A,B,Ruta,Velocidades),
 	min_list(Velocidades,V).
-	
 
 vel(A,B,[A,B],V):-
 	velocidad(A,B,V).
-
-% vel(A,B,[A,X|Xr],Velocidades):-
-% 	member(B,Xr),
-% 	velocidad(A,X,V1),
-% 	append([V1],[Velocidades],Velocidades),
-% 	vel(X,B,[X|Xr],Velocidades).
 
 vel(X,Y1,[_|LRuta],Velocidades):-
     primero(LRuta,Y2),
@@ -142,9 +142,19 @@ vel(X,Y1,[_|LRuta],Velocidades):-
     aux(V2,C),
     append([V],C,Velocidades).
 
+%velocidad_maxima(A,B,V)
+%Ejemplo #1: velocidad_maxima(8,6,V). -> V=10.
+%Ejemplo #2: velocidad_maxima(5,9,V). -> V=30.
+velocidad_maxima(A,B,V):-
+    conectados(A,B),
+    velocidad(A,B,V).
 
-%velocidad_maxima(A,B,V).
+velocidad_maxima(A,B,V):-
+    vel(A,B,V).
 
+vel(A,B,Vel):-
+    conexion(A,B,Ruta),
+    velocidad_maxima(A,B,Ruta,Vel).
 
 % confiabilidad(A,B,Ruta,P).
 % Ejemplo #1: confiabilidad(9,5,[9,3,1,5],C). -> C = 0.88445 .
