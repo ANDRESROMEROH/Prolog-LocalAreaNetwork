@@ -92,7 +92,7 @@ primero([X|_],X). %Devuelve el primer elemento de una lista
 %Ejemplo #1: conexion(9,3). -> true.
 %Ejemplo #2: conexion(1,6). -> true.
 conexion(X,Y):-
-    visitar(X,Y,[X]).
+    visitar(X,Y,[X]),!.
 
 visitar(X,Y,_) :- 
     conectados(X,Y).
@@ -127,7 +127,7 @@ visitar(X,Y1,Visitado,Ruta):-
 %Ejemplo #2: velocidad_maxima(7,4,[7,3,1,4],V). -> V=40.
 velocidad_maxima(A,B,Ruta,V):-
 	vel(A,B,Ruta,Velocidades),
-	min_list(Velocidades,V).
+	min_list(Velocidades,V),!.
 
 vel(A,B,[A,B],V):-
 	velocidad(A,B,V).
