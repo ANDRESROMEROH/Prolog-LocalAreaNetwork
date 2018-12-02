@@ -1,11 +1,3 @@
-% Universidad Nacional de Costa Rica
-% Paradigmas de Programación
-% Proyecto #3: Red de Área Local en Prolog
-% Andrés Romero Hernández, 4-0230-0958.
-% Estefanía Murillo Romero, 1-1700-0387.
-% II Ciclo, 2018
-
-
 % Definición del Grafo %
 
 %Servidores:
@@ -71,7 +63,9 @@ vertice(9,3,0.98,30).
 % V -> Velocidad
 % D -> Dato de Entrada
 % E -> Dato de Salida
-conectados(X,Y):- %Predicado que verifica si 2 nodos estan conectados directamente
+
+%Predicado que verifica si 2 nodos estan conectados directamente:
+conectados(X,Y):- 
     vertice(X,Y,_,_) ; vertice(Y,X,_,_).
 
 velocidad(X,Y,V):-
@@ -80,13 +74,16 @@ velocidad(X,Y,V):-
 confianza(X,Y,C):-
     vertice(X,Y,C,_).
 
-aux(D,E):- ( is_list(D) -> E = D ; E = [D]). %Devuelve una lista en caso de que el elemento de entrada no lo sea.
+%Devuelve una lista en caso de que el elemento de entrada no lo sea:
+aux(D,E):- ( is_list(D) -> E = D ; E = [D]). 
 
-primero([X|_],X). %Devuelve el primer elemento de una lista
+%Devuelve el primer elemento de una lista:
+primero([X|_],X). 
+
 % FIN Predicados Auxiliares...
 
 
-%Predicados a Completar:
+%Predicados para realizar los calculos:
 
 %conexión(A,B).
 %Ejemplo #1: conexion(9,3). -> true.
@@ -103,7 +100,6 @@ visitar(X,Y1,Visitado):-
     Y2 \== Y1,
     \+member(Y2,Visitado),
     visitar(Y2,Y1,[Y2|Visitado]). 
-    
 
 %conexión(A,B,Ruta).
 %Ejemplo #1: conexion(9,6,Ruta). 
@@ -159,7 +155,6 @@ vel(A,B,Vel):-
 % confiabilidad(A,B,Ruta,P).
 % Ejemplo #1: confiabilidad(9,5,[9,3,1,5],C). -> C = 0.88445 .
 % Ejemplo #2: confiabilidad(9,6,[9,3,2,6],C). -> C = 0.931588 .
-
 confiabilidad(X,Y,Ruta,P):-
     c2(X,Y,Ruta,P).
 
