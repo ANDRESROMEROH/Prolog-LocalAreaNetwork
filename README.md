@@ -17,9 +17,6 @@ Esta pequeña aplicación en Prolog consta de un conjunto predicados utilizados 
 
 > localareanetwork.pl
 
-## Red Implementada
-![enter image description here](https://lh3.googleusercontent.com/7JUTsuXLqOdRKr4kLDSEP5xEGiM29lgqfnW4Xvc1syjIeZCjlFPYuKtVPoUm-eWPiPwz7AXV95-w)
-
 ## Soporte
 andres.romero22@outlook.com
 estefa.mr97@gmail.com
